@@ -23,7 +23,7 @@ function onMapLoad() {
 			dataType: 'json',
 			success: function (data) {
 				data_markers = data;
-				render_to_map(data_markers, 'all');
+				render_to_map(data_markers, 'Todos');
 				console.log(data);
 				$.each(data, function (index, item) {
 			
@@ -96,30 +96,20 @@ function render_to_map(data_markers, filter) {
 
 markers.clearLayers();
 
-	$.each(data_markers, function (index, item) {
+	$.each(data_markers, function (index_o) {
 
 
-		if ("Todos" == filter || "all" == filter) {
-
-			var marker = L.marker([item.lat, item.lng]).bindPopup(`"<b><u>${item.name}</u> </b>${item.address}"<img src="${item.photo}">`);
-			markers.addLayer(marker);
-			
-		}else{
-	
-		kind_food_elements = item.kind_food.split(",");
-		for(j = 0; j < kind_food_elements.length; j++){
 
 			
-		if (kind_food_elements[j] == filter) {
+		if (filter == 'Todos' || data_markers[index_o].kind_food.split(",").includes(filter)) {
 
-			var marker = L.marker([item.lat, item.lng]).bindPopup(`"<b><u>${item.name}</u> </b>${item.address}"<img src="${item.photo}">`);
+			var marker = L.marker([data_markers[index_o].lat, data_markers[index_o].lng]).bindPopup(`"<b><u>${data_markers[index_o].name}</u> </b>${data_markers[index_o].address}"<img src="${data_markers[index_o].photo}">`);
+			
 			markers.addLayer(marker);
+			
 			
 		}
-	}
 		
-		}
-	
 	});
 
 	   //agrega el MarkerClusterGroup al mapa
@@ -145,5 +135,3 @@ L.circle(e.latlng, radius).addTo(map);
 }
  map.on('locationfound', onLocationFound);
  map.on('locationerror', onLocationError);
-
- 
